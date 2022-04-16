@@ -6,7 +6,8 @@
     "authors": [
         {
             "name": "Alberto",
-            "email": "alberto.r.caballero.87@gmail.com"
+            "email": "alberto.r.caballero.87@gmail.com",
+            "homepage": "https://cosasdedevs.com/"
         }
     ],
     "minimum-stability": "dev",
