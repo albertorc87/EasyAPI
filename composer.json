@@ -1,7 +1,7 @@
 {
     "name": "albertorc87/easyapi",
     "description": "Create easy api",
-    "type": "project",
+    "type": "package",
     "license": "MIT",
     "authors": [
         {
