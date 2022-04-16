@@ -20,11 +20,17 @@ class Router
      * Save routes in $urls var
      * @param string $method http method
      * @param string $route URI
-     * @param string $handler class/method to call for this url
+     * @param string|callable $handler class/method or callable to call for this url
      * @param string $middleware middleware class, can be optional
      */
-    private static function route(string $method, string $route, string $handler, string $middleware = null): void
+    private static function route(string $method, string $route, $handler, string $middleware = null): void
     {
+
+        $invalid_type = !is_callable($handler) && !is_string($handler);
+        $invalid_format = is_string($handler) && !preg_match('/@/', $handler);
+        if($invalid_type || $invalid_format) {
+            throw new RouterException('$handler must be a string with class and method separated by at @ or an anonymous function');
+        }
 
         $method = strtoupper($method);
 
@@ -103,10 +109,10 @@ class Router
     /**
      * Save route for method GET
      * @param string $route URI
-     * @param string $handler class/method to call for this url
+     * @param string|callable $handler class/method to call for this url
      * @param string $middleware middleware class, can be optional
      */
-    public static function get(string $route, string $handler, string $middleware = null): void
+    public static function get(string $route, $handler, string $middleware = null): void
     {
         self::route('GET', $route, $handler, $middleware);
     }
@@ -114,10 +120,10 @@ class Router
     /**
      * Save route for method POST
      * @param string $route URI
-     * @param string $handler class/method to call for this url
+     * @param string|callable $handler class/method to call for this url
      * @param string $middleware middleware class, can be optional
      */
-    public static function post(string $route, string $handler, string $middleware = null): void
+    public static function post(string $route, $handler, string $middleware = null): void
     {
         self::route('POST', $route, $handler, $middleware);
     }
@@ -125,10 +131,10 @@ class Router
     /**
      * Save route for method PUT
      * @param string $route URI
-     * @param string $handler class/method to call for this url
+     * @param string|callable $handler class/method to call for this url
      * @param string $middleware middleware class, can be optional
      */
-    public static function put(string $route, string $handler, string $middleware = null): void
+    public static function put(string $route, $handler, string $middleware = null): void
     {
         self::route('PUT', $route, $handler, $middleware);
     }
@@ -136,10 +142,10 @@ class Router
     /**
      * Save route for method PATCH
      * @param string $route URI
-     * @param string $handler class/method to call for this url
+     * @param string|callable $handler class/method to call for this url
      * @param string $middleware middleware class, can be optional
      */
-    public static function patch(string $route, string $handler, string $middleware = null): void
+    public static function patch(string $route, $handler, string $middleware = null): void
     {
         self::route('PATCH', $route, $handler, $middleware);
     }
@@ -147,10 +153,10 @@ class Router
     /**
      * Save route for method DELETE
      * @param string $route URI
-     * @param string $handler class/method to call for this url
+     * @param string|callable $handler class/method to call for this url
      * @param string $middleware middleware class, can be optional
      */
-    public static function delete(string $route, string $handler, string $middleware = null): void
+    public static function delete(string $route, $handler, string $middleware = null): void
     {
         self::route('DELETE', $route, $handler, $middleware);
     }

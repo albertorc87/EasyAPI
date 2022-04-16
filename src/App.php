@@ -6,7 +6,7 @@ use EasyAPI\Router;
 use EasyAPI\Response;
 use EasyAPI\Exceptions\HttpException;
 use EasyAPI\Exceptions\EasyApiException;
-use Exception;
+use Throwable;
 
 /**
  * Main class
@@ -61,12 +61,16 @@ class App {
             $path_params = $route_info['path_params'];
             $handler = $route_info['handler'];
 
-            list($class, $method) = explode('/', $handler, 2);
-
-            $response = call_user_func_array([new $class, $method], $path_params);
+            if(is_callable($handler) || !preg_match('/@/', $handler)) {
+                $response = call_user_func_array($handler, $path_params);
+            }
+            else {
+                list($class, $method) = explode('@', $handler, 2);
+                $response = call_user_func_array([new $class, $method], $path_params);
+            }
 
             if(!($response instanceof Response)) {
-                throw new Exception('Invalid format');
+                throw new EasyApiException('Invalid response format');
             }
 
             $response->returnData();
@@ -75,7 +79,7 @@ class App {
             $response = new Response('json', $e->getMessage(), $e->getCode());
             $response->returnData();
         }
-        catch(Exception $e) {
+        catch(Throwable $e) {
             if($_ENV['DEBUG_MODE']) {
                 throw $e;
             }
