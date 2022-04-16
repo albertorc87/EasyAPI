@@ -2,6 +2,12 @@
 
 namespace EasyAPI;
 
+use EasyAPI\Exceptions\EasyApiException;
+
+/**
+ * Class for prepare response to user and return http status code,
+ * content and headers
+ */
 class Response
 {
 
@@ -9,6 +15,13 @@ class Response
     private $response = '';
     private $status_code = null;
 
+    /**
+     * Prepare the response
+     * @param string $type type of response, can be json, raw or html
+     * @param mixed $data response data
+     * @param int $status_code http status code
+     * @param array $headers extra headers in format key-value
+     */
     public function __construct(
         string $type,
         $data = null,
@@ -33,11 +46,15 @@ class Response
                 $this->html($data);
                 break;
             default:
-                //TODO: Exception
+                throw new EasyApiException('Invalid Response Type, only valids are raw, json and html');
                 break;
         }
     }
 
+    /**
+     * Prepare a raw or custom response
+     * @param string $data
+     */
     private function raw(string $data): void
     {
         if(empty($this->headers['content-type'])) {
@@ -47,6 +64,10 @@ class Response
         $this->response = $data;
     }
 
+    /**
+     * Prepare a response with json format
+     * @param $data
+     */
     private function json($data): void
     {
         $this->headers['content-type'] = 'application/json';
@@ -67,6 +88,9 @@ class Response
         $this->response = json_encode($response);
     }
 
+    /**
+     * Prepare html response
+     */
     private function html(string $data): void
     {
         $this->headers['content-type'] = 'text/html';
@@ -74,6 +98,9 @@ class Response
         $this->response = $data;
     }
 
+    /**
+     * Response http status code, headers and content to user
+     */
     public function returnData()
     {
         foreach($this->headers as $header_name => $header_value) {

@@ -8,6 +8,9 @@ use EasyAPI\Exceptions\HttpException;
 use EasyAPI\Exceptions\EasyApiException;
 use Exception;
 
+/**
+ * Main class
+ */
 class App {
 
     public function __construct()
@@ -15,6 +18,9 @@ class App {
         $this->checkEnv();
     }
 
+    /**
+     * Check if the environment is defined correctly
+     */
     private function checkEnv(): void
     {
         if(!isset($_ENV['DEBUG_MODE'])) {
@@ -41,6 +47,11 @@ class App {
         }
     }
 
+    /**
+     * This method is responsible for receiving the URI,
+     * checking that we have added it to the router and if so, calling the related
+     * class and method to that URI
+     */
     public function send()
     {
 

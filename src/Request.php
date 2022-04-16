@@ -2,6 +2,9 @@
 
 namespace EasyAPI;
 
+/**
+ * Set data from middleware to later access it from a controller
+ */
 class Request
 {
     private $data = [];

@@ -8,12 +8,22 @@ use EasyAPI\Exceptions\HttpException;
 use EasyAPI\Middleware;
 use EasyAPI\Request;
 
+/**
+ * This class add routes to system
+ */
 class Router
 {
     private static $urls = [];
     private const METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
-    private static function route(string $method, string $route, string $handler, string $class = null): void
+    /**
+     * Save routes in $urls var
+     * @param string $method http method
+     * @param string $route URI
+     * @param string $handler class/method to call for this url
+     * @param string $middleware middleware class, can be optional
+     */
+    private static function route(string $method, string $route, string $handler, string $middleware = null): void
     {
 
         $method = strtoupper($method);
@@ -32,10 +42,15 @@ class Router
 
         self::$urls[$method][$route] = [
             'handler' => $handler,
-            'class' => $class
+            'middleware' => $middleware
         ];
     }
 
+    /**
+     * Get class, method and middleware associate an URI
+     *
+     * @return array with class, method and params
+    */
     public static function getRouteInfo(): array
     {
         $uri = $_SERVER['REQUEST_URI'] ?? '';
@@ -53,7 +68,7 @@ class Router
         foreach(self::$urls[$method] as $route => &$data) {
 
             $handler = $data['handler'];
-            $class = $data['class'];
+            $middleware = $data['middleware'];
             if(preg_match('/^' . str_replace(['/'], ['\/'], $route) . '$/', $uri, $m)) {
                 $path_params = [];
 
@@ -66,8 +81,8 @@ class Router
                 }
 
                 $request = new Request();
-                if($class) {
-                    $middleware = new $class;
+                if($middleware) {
+                    $middleware = new $middleware;
                     if(!($middleware instanceof Middleware)) {
                         throw new RouterException("Invalid middleware, must be extends of EasyAPI\\Middleware");
                     }
@@ -77,7 +92,6 @@ class Router
                 return [
                     'handler' => $handler,
                     'path_params' => $path_params,
-                    // 'middleware' => $class,
                 ];
             }
         }
@@ -86,28 +100,58 @@ class Router
         throw new HttpException('Not found', 404);
     }
 
-    public static function get(string $route, string $handler, string $class = null): void
+    /**
+     * Save route for method GET
+     * @param string $route URI
+     * @param string $handler class/method to call for this url
+     * @param string $middleware middleware class, can be optional
+     */
+    public static function get(string $route, string $handler, string $middleware = null): void
     {
-        self::route('GET', $route, $handler, $class);
+        self::route('GET', $route, $handler, $middleware);
     }
 
-    public static function post(string $route, string $handler, string $class = null): void
+    /**
+     * Save route for method POST
+     * @param string $route URI
+     * @param string $handler class/method to call for this url
+     * @param string $middleware middleware class, can be optional
+     */
+    public static function post(string $route, string $handler, string $middleware = null): void
     {
-        self::route('POST', $route, $handler, $class);
+        self::route('POST', $route, $handler, $middleware);
     }
 
-    public static function put(string $route, string $handler, string $class = null): void
+    /**
+     * Save route for method PUT
+     * @param string $route URI
+     * @param string $handler class/method to call for this url
+     * @param string $middleware middleware class, can be optional
+     */
+    public static function put(string $route, string $handler, string $middleware = null): void
     {
-        self::route('PUT', $route, $handler, $class);
+        self::route('PUT', $route, $handler, $middleware);
     }
 
-    public static function patch(string $route, string $handler, string $class = null): void
+    /**
+     * Save route for method PATCH
+     * @param string $route URI
+     * @param string $handler class/method to call for this url
+     * @param string $middleware middleware class, can be optional
+     */
+    public static function patch(string $route, string $handler, string $middleware = null): void
     {
-        self::route('PATCH', $route, $handler, $class);
+        self::route('PATCH', $route, $handler, $middleware);
     }
 
-    public static function delete(string $route, string $handler, string $class = null): void
+    /**
+     * Save route for method DELETE
+     * @param string $route URI
+     * @param string $handler class/method to call for this url
+     * @param string $middleware middleware class, can be optional
+     */
+    public static function delete(string $route, string $handler, string $middleware = null): void
     {
-        self::route('DELETE', $route, $handler, $class);
+        self::route('DELETE', $route, $handler, $middleware);
     }
 }
