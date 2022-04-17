@@ -10,8 +10,7 @@
             "homepage": "https://cosasdedevs.com/"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": false,
+    "minimum-stability": "stable",
     "require": {
         "php": "7.4 - 8.1"
     },
