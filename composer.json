@@ -1,6 +1,6 @@
 {
     "name": "albertorc87/easyapi",
-    "description": "Create easy api",
+    "description": "EasyAPI es un micro framework pensado en el desarrollo de APIs con arquitectura REST y que no depende de ninguna librería.",
     "type": "package",
     "license": "MIT",
     "authors": [
