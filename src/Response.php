@@ -58,7 +58,7 @@ class Response
     private function raw(string $data): void
     {
         if(empty($this->headers['content-type'])) {
-            $this->headers['content-type'] = 'text/plain';
+            $this->headers['content-type'] = 'text/plain; charset=utf-8';
         }
 
         $this->response = $data;
@@ -70,7 +70,7 @@ class Response
      */
     private function json($data): void
     {
-        $this->headers['content-type'] = 'application/json';
+        $this->headers['content-type'] = 'application/json; charset=utf-8';
 
         if($this->status_code > 399) {
             $response = [
@@ -93,7 +93,7 @@ class Response
      */
     private function html(string $data): void
     {
-        $this->headers['content-type'] = 'text/html';
+        $this->headers['content-type'] = 'text/html; charset=utf-8';
 
         $this->response = $data;
     }
