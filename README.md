@@ -11,7 +11,7 @@ Si muchas cosas de las que se comentan en esta documentación no las tienes clar
 ## Instalación
 
 ```
-composer require --dev albertorc87/easyapi
+composer require albertorc87/easyapi
 ```
 
 ## Hello world
