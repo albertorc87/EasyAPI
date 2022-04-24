@@ -35,6 +35,10 @@ class Response
             $this->headers[strtolower($header_name)] = $header_value;
         }
 
+        if($status_code < 100 || $status_code > 599) {
+            throw new EasyApiException('Invalid status code, must be a number between 100 and 599');
+        }
+
         switch($type) {
             case 'raw':
                 $this->raw($data);
