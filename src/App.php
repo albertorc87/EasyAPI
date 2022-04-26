@@ -77,11 +77,11 @@ class App {
             $handler = $route_info['handler'];
 
             if(is_callable($handler) || !preg_match('/@/', $handler)) {
-                $response = call_user_func_array($handler, $path_params);
+                $response = call_user_func_array($handler, array_values($path_params));
             }
             else {
                 list($class, $method) = explode('@', $handler, 2);
-                $response = call_user_func_array([new $class, $method], $path_params);
+                $response = call_user_func_array([new $class, $method], array_values($path_params));
             }
 
             if(!($response instanceof Response)) {
