@@ -67,7 +67,7 @@ Router::get('/users', UserController::class . '@all', IsAdmin::class);
 Router::post('/users', UserController::class . '@create');
 Router::put('/users/(?<id>\d+)', UserController::class . '@update', IsAuth::class);
 Router::patch('/users/(?<id>\d+)', UserController::class . '@partial', IsAuth::class);
-Router::delete('/users/(?<id>\d+)', UserController::class . '@delete', IsAuth::class);
+Router::delete('/users/(?<id>\d+)', UserController::class . '@delete', [IsAdmin::class, IsAuth::class]);
 ```
 
 El primer parámetro que recibe la URI a la que queramos apuntar.
@@ -80,7 +80,7 @@ App\Controller\UserController sería la clase.
 
 all sería el método que contiene la clase y al que queremos llamar.
 
-El tercer parámetro es opcional y en el podemos añadir un middleware para por ejemplo comprobar que el usuario está autenticado en los casos en los que lo necesitemos. Explicaremos más adelante su funcionamiento.
+El tercer parámetro es opcional y en el podemos añadir un middleware para por ejemplo comprobar que el usuario está autenticado en los casos en los que lo necesitemos. Explicaremos más adelante su funcionamiento. En este caso podemos enviar un middleware o un array de middlewares.
 
 ### Envío de parámetros de ruta
 
