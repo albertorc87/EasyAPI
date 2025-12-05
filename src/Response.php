@@ -51,7 +51,6 @@ class Response
                 break;
             default:
                 throw new EasyApiException('Invalid Response Type, only valids are raw, json and html');
-                break;
         }
     }
 
